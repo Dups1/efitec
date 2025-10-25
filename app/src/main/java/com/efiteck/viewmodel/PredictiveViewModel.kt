@@ -35,6 +35,7 @@ class PredictiveViewModel : ViewModel() {
 
     fun runPredictions() {
         viewModelScope.launch {
+            android.util.Log.d("PredictiveViewModel", "▶️ Iniciando ejecución de predicciones...")
             _predictiveState.value = PredictiveState.Loading
 
             try {
@@ -42,8 +43,10 @@ class PredictiveViewModel : ViewModel() {
                 val results = PredictiveModel.runAllTests()
                 val accuracy = PredictiveModel.getModelAccuracy()
 
+                android.util.Log.d("PredictiveViewModel", "✅ Predicciones completadas. Accuracy: ${(accuracy * 100).toInt()}%")
                 _predictiveState.value = PredictiveState.Success(results, accuracy)
             } catch (e: Exception) {
+                android.util.Log.e("PredictiveViewModel", "❌ Error ejecutando predicciones: ${e.message}", e)
                 _predictiveState.value = PredictiveState.Error("Error ejecutando predicciones: ${e.message}")
             }
         }
