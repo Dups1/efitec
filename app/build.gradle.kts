@@ -6,12 +6,12 @@ plugins {
 
 android {
     namespace = "com.efiteck"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.efiteck"
         minSdk = 28
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
@@ -49,6 +49,26 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation("androidx.compose.material:material-icons-extended")
+    
+    // Firebase
+    implementation(platform("com.google.firebase:firebase-bom:34.4.0"))
+    implementation("com.google.firebase:firebase-auth-ktx:23.1.0")
+    implementation("com.google.firebase:firebase-storage-ktx:21.0.1")
+    implementation("com.google.firebase:firebase-vertexai:16.0.2")
+    implementation("com.google.firebase:firebase-firestore-ktx:24.10.0")
+
+    // PyTorch Mobile for predictive model
+    implementation("org.pytorch:pytorch_android_lite:2.1.0")
+    implementation("org.pytorch:pytorch_android_torchvision_lite:2.1.0")
+
+    // Navigation
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    
+    // Image loading
+    implementation(libs.coil.compose)
+    
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -57,3 +77,6 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 }
+
+// Apply Google Services plugin at the end
+apply(plugin = "com.google.gms.google-services")

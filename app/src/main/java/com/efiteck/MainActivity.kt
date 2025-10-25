@@ -4,44 +4,63 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.rememberNavController
+import com.efiteck.navigation.NavGraph
+import com.efiteck.navigation.Screen
 import com.efiteck.ui.theme.EfiteckTheme
+import com.efiteck.viewmodel.AuthState
+import com.efiteck.viewmodel.AuthViewModel
+import com.efiteck.viewmodel.PredictiveViewModel
+import com.google.firebase.FirebaseApp
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+        // Initialize Firebase
+        FirebaseApp.initializeApp(this)
+        
         enableEdgeToEdge()
         setContent {
             EfiteckTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                val navController = rememberNavController()
+                val authViewModel: AuthViewModel = viewModel()
+                val predictiveViewModel: PredictiveViewModel = viewModel()
+                val authState by authViewModel.authState.collectAsState()
+                
+                // Determine start destination based on auth state
+                LaunchedEffect(authState) {
+                    when (authState) {
+                        is AuthState.Authenticated -> {
+                            navController.navigate(Screen.Home.route) {
+                                popUpTo(0) { inclusive = true }
+                            }
+                        }
+                        is AuthState.Unauthenticated -> {
+                            navController.navigate(Screen.Login.route) {
+                                popUpTo(0) { inclusive = true }
+                            }
+                        }
+                        else -> {}
+                    }
                 }
+                
+                val startDestination = when (authState) {
+                    is AuthState.Authenticated -> Screen.Home.route
+                    else -> Screen.Login.route
+                }
+                
+                NavGraph(
+                    navController = navController,
+                    startDestination = startDestination,
+                    authViewModel = authViewModel,
+                    predictiveViewModel = predictiveViewModel
+                )
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    EfiteckTheme {
-        Greeting("Android")
     }
 }

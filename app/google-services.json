@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "194986930879",
+    "project_id": "efiteck",
+    "storage_bucket": "efiteck.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:194986930879:android:16a2c1cf3c68a1e48e0c0a",
+        "android_client_info": {
+          "package_name": "com.efiteck"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAnjDS-VKKAvvwTA0sV1LrZ2V0eMDq7uRg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
